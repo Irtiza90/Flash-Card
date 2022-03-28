@@ -114,9 +114,10 @@ class Method:
             self.words_known_data_length = 0
 
         else:
-            for i in words_known_data:
-                # Basically Removes New lines from all elements in words_known_data list
-                words_known_data[words_known_data.index(i)] = i.strip()
+            # Basically Removes New lines from all elements in words_known_data list
+            words_known_data = list(map(lambda word: word.strip(), words_known_data))
+            # for i in words_known_data:
+                # words_known_data[words_known_data.index(i)] = i.strip()
 
         finally:
             if self.still_has_translations():
@@ -136,13 +137,14 @@ class Method:
 
         It will update Everytime The word changes
         """
-
-        tr_from = self.data_manager.data_frame[self.data_manager.translate_from][self.words_known_data_length]
-        tr_to = self.data_manager.data_frame[self.data_manager.translate_to][self.words_known_data_length]
+        dm = self.data_manager
+        
+        tr_from = dm.data_frame[dm.translate_from][self.words_known_data_length]
+        tr_to = dm.data_frame[dm.translate_to][self.words_known_data_length]
 
         # Changes The current word dic to the new words Everytime when called
-        self.current_word[self.data_manager.translate_from] = tr_from
-        self.current_word[self.data_manager.translate_to] = tr_to
+        self.current_word[dm.translate_from] = tr_from
+        self.current_word[dm.translate_to] = tr_to
 
 
     def still_has_translations(self) -> bool:
@@ -153,11 +155,13 @@ class Method:
         """
         try:
             self.get_words_known()
-        except FileNotFoundError: pass
+            
+        except FileNotFoundError: 
+            pass
 
 
         if self.words_known_data_length < self.data_manager.total_words_len:
             return True
-        else:
-            return False
+        # else
+        return False
 
